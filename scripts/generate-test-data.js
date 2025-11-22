@@ -85,10 +85,15 @@ db.serialize(() => {
         );
 
         // Songs
+        // Songs
         for (let j = 1; j <= 3; j++) {
             const songName = `Song ${j}.mp3`;
             const songPath = path.join(journalDir, songName);
-            fs.writeFileSync(songPath, 'ID3' + Buffer.alloc(100).toString()); // Dummy MP3
+
+            // Minimal valid MP3 frame (MPEG 1 Layer 3 128kbps 44.1kHz stereo)
+            // 1 frame is enough to be recognized as MP3
+            const mp3Header = Buffer.from('FFFB9064000000000000000000000000', 'hex');
+            fs.writeFileSync(songPath, mp3Header);
 
             // DB path uses backslashes typically in this dataset, or matching folder structure
             // We'll use the folder name + filename
@@ -96,7 +101,7 @@ db.serialize(() => {
 
             stmtSong.run(
                 i,
-                `Song ${j}`,
+                `Journal ${i} - Song ${j}`,
                 `Artist ${j}`,
                 `Album ${j}`,
                 200,
@@ -107,9 +112,17 @@ db.serialize(() => {
     stmtJournal.finalize();
     stmtSong.finalize();
 
-    // Mappings (Random tags)
+    // Mappings (Assign 1-2 unique tags per journal)
     for (let i = 1; i <= 20; i++) {
-        stmtMapping.run(i, (i % 3) + 1);
+        const numTags = (i % 2) + 1; // 1 or 2 tags
+        const startTag = (i % 3) + 1;
+
+        stmtMapping.run(i, startTag);
+        if (numTags > 1) {
+            let nextTag = startTag + 1;
+            if (nextTag > 3) nextTag = 1;
+            stmtMapping.run(i, nextTag);
+        }
     }
     stmtMapping.finalize();
 
