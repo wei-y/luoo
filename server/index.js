@@ -11,6 +11,18 @@ app.use(express.json());
 
 const fs = require('fs');
 
+// Serve static audio files
+// The 'vols' directory contains the MP3 files
+let audioPath;
+try {
+    audioPath = fs.realpathSync(path.resolve(__dirname, '../data/vols'));
+} catch (e) {
+    console.warn('Could not resolve real path for data/vols, using relative path:', e.message);
+    audioPath = path.resolve(__dirname, '../data/vols');
+}
+console.log('Serving audio from:', audioPath);
+app.use('/audio', express.static(audioPath));
+
 // Map vol number to folder name
 const volToFolderMap = {};
 const initVolMap = () => {
