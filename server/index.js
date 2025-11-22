@@ -9,11 +9,6 @@ const PORT = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json());
 
-// Serve static audio files
-// The 'vols' directory contains the MP3 files
-const audioPath = path.resolve(__dirname, '../data/vols');
-app.use('/audio', express.static(audioPath));
-
 const fs = require('fs');
 
 // Map vol number to folder name
@@ -123,12 +118,15 @@ app.get('/api/journals/:id/songs', async (req, res) => {
     try {
         const songs = await db.getSongsByJournalId(req.params.id);
         // Normalize paths for web usage
-        const songsWithUrl = songs.map(song => ({
-            ...song,
-            // Replace backslashes with forward slashes and ensure it's URL safe if needed
-            // But for express.static, we just need the correct path relative to the root
-            src: `/audio/${song.path.replace(/\\/g, '/')}`
-        }));
+        const songsWithUrl = songs.map(song => {
+            if (song.path) {
+                return {
+                    ...song,
+                    src: `/audio/${song.path.replace(/\\/g, '/')}`
+                };
+            }
+            return song; // Return as is if src is already set (e.g. test data)
+        });
         res.json(songsWithUrl);
     } catch (err) {
         res.status(500).json({ error: err.message });
