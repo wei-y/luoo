@@ -14,22 +14,16 @@ const db = new sqlite3.Database(dbPath);
 
 const { execSync } = require('child_process');
 
-// Download sample MP3 (CC0 from FreePD)
-const sampleMp3Url = 'https://freepd.com/music/Backbeat.mp3';
-const sampleMp3Path = path.join(testDataDir, 'sample.mp3');
+// Use bundled sample MP3
+const sampleMp3Path = path.join(__dirname, 'assets/sample.mp3');
 
-console.log(`Downloading sample MP3 from ${sampleMp3Url}...`);
-
-try {
-    // Use curl to download as it proved more reliable in this environment
-    execSync(`curl -L -o "${sampleMp3Path}" "${sampleMp3Url}"`, { stdio: 'inherit' });
-    console.log('Sample MP3 downloaded.');
-
-    generateData();
-} catch (error) {
-    console.error('Failed to download MP3:', error.message);
+if (!fs.existsSync(sampleMp3Path)) {
+    console.error('Sample MP3 not found at:', sampleMp3Path);
+    console.error('Please ensure scripts/assets/sample.mp3 exists.');
     process.exit(1);
 }
+
+generateData();
 
 function generateData() {
     db.serialize(() => {
