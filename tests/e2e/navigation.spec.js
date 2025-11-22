@@ -9,7 +9,7 @@ test.describe('Navigation', () => {
 
         const homePage = new HomePage(page);
         await homePage.navigate();
-        await expect(page).toHaveTitle(/client/);
+        await expect(page).toHaveTitle(/Luoo/);
 
         const firstCard = await homePage.getJournalCard(0);
         await firstCard.waitFor({ state: 'visible', timeout: 10000 });
