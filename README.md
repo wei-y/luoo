@@ -1,8 +1,6 @@
 # Luoo MP3 Player
 
-https://github.com/user-attachments/assets/demo.webm
-
-> **Note**: Since I cannot generate a GIF without ffmpeg, I have included a WebM video recording of the app usage. GitHub supports embedding videos.
+![Luoo Player Demo](docs/demo.gif)
 
 A modern, minimalist web-based music player inspired by Luoo.net. for browsing and listening to Luoo music journals. Built with React (Vite) and Node.js (Express).
 
