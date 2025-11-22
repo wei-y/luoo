@@ -39,7 +39,14 @@ initVolMap();
 const processJournal = (journal) => {
     // Ensure vol is a string for lookup
     const volStr = String(journal.vol);
-    const folder = volToFolderMap[volStr];
+    let folder = volToFolderMap[volStr];
+
+    // If not found, try refreshing the map (in case new data was added)
+    if (!folder) {
+        initVolMap();
+        folder = volToFolderMap[volStr];
+    }
+
     let coverUrl = journal.cover; // Default to DB value or whatever is there
 
     if (folder) {
