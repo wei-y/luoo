@@ -50,6 +50,22 @@ The application requires a `data` directory in the project root containing the m
 ln -s /path/to/your/real/data ./data
 ```
 
+### 3.1 Running with Test Data (Stub)
+
+If you don't have access to the real data, you can generate a set of test data (stub) to run the application in demo mode.
+
+1.  **Generate Test Data**:
+    ```bash
+    npm run generate-data
+    ```
+    This will create a `test-data` directory with a sample database and dummy MP3 files.
+
+2.  **Link Test Data**:
+    ```bash
+    ln -s $(pwd)/test-data ./data
+    ```
+    *Note: If a `data` folder already exists, rename or remove it first.*
+
 ## Running the Application
 
 You need to run both the backend server and the frontend development server.

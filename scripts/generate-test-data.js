@@ -70,6 +70,13 @@ db.serialize(() => {
 
         if (!fs.existsSync(journalDir)) fs.mkdirSync(journalDir);
 
+        // Copy icon.png as dummy cover
+        const iconPath = path.join(__dirname, '../client/public/icon.png');
+        const coverPath = path.join(journalDir, 'cover.jpg');
+        if (fs.existsSync(iconPath)) {
+            fs.copyFileSync(iconPath, coverPath);
+        }
+
         stmtJournal.run(
             vol,
             title,
