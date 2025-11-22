@@ -45,6 +45,11 @@ const TagList = ({ onPlay }) => {
         fetchJournals();
     }, [page, searchParams]); // Re-fetch when page or params change
 
+    // Reset page to 1 when tags change
+    useEffect(() => {
+        setPage(1);
+    }, [searchParams.get('tags')]);
+
     const noTag = tags.find(t => t.name === 'No Tag');
     const otherTags = tags.filter(t => t.name !== 'No Tag');
 
