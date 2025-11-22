@@ -37,3 +37,4 @@ yarn-error.log*
 # Project specific
 data
 server/luoo.db
+test-data/
